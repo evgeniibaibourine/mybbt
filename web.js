@@ -3,6 +3,7 @@ var gzippo = require('gzippo');
 var express = require("express");
 var logfmt = require("logfmt");
 var moment = require("moment");
+var bodyParser = require("body-parser");
 moment().format();
 var mongodb = require("mongodb");
 
