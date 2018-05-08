@@ -2,15 +2,18 @@
   "name": "angualrjs-seed",
   "description": "A starter project for angular js",
   "dependencies": {
-    "express": "^4.9.7",
+    "express": "^4.15.2",
     "gzippo": "^0.2.0",
-    "logfmt": "^1.2.0"
+    "logfmt": "^1.2.0",
+    "moment": "^2.22.1",
+    "mongodb": "^3.0.4",
+    "body-parser": "^1.17.1"
   },
   "devDependencies": {
-        "phantomjs" : "*",
-        "karma" : "*",
-        "karma-junit-reporter" : "*",    
-        "karma-jasmine" : "*",
-        "karma-ng-scenario" : "*"
-    }
+    "phantomjs": "*",
+    "karma": "*",
+    "karma-junit-reporter": "*",
+    "karma-jasmine": "*",
+    "karma-ng-scenario": "*"
+  }
 }
