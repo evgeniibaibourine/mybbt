@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.dashboard.location', ['ngRoute'])
+angular.module('myApp.dashboard.location', ['ngRoute', 'myApp.layout'])
 
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/location', {

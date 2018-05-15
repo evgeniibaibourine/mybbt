@@ -2,6 +2,7 @@
 
 angular.module('myApp.dashboard', [
     'ngRoute',
+    'myApp.layout',
     'myApp.dashboard.location'
 ])
 

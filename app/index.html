@@ -4,41 +4,355 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>MyBBT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="../node_modules/html5-boilerplate/dist/css/normalize.css">
-  <link rel="stylesheet" href="../node_modules/html5-boilerplate/dist/css/main.css"> -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; font-src 'self' data: fonts.gstatic.com">
+    <title>MyBBT</title>
+    <!-- APP STYLES-->
     <link rel="stylesheet" href="app.css">
-    <!-- <script src="../node_modules/html5-boilerplate/dist/js/vendor/modernizr-3.6.0.min.js"></script> -->
+    <!-- =============== ALL STYLES ===============-->
+    <!-- FONT AWESOME-->
+    <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.css">
+    <!-- SIMPLE LINE ICONS-->
+    <link rel="stylesheet" href="assets/css/simple-line-icons/css/simple-line-icons.css">
+    <!-- ANIMATE.CSS-->
+    <link rel="stylesheet" href="assets/css/animate.css/animate.css">
+    <!-- WHIRL (spinners)-->
+    <link rel="stylesheet" href="assets/css/whirl/dist/whirl.css">
+    <!-- =============== PAGE STYLES ===============-->
+    <!-- WEATHER ICONS-->
+    <link rel="stylesheet" href="assets/css/weather-icons/css/weather-icons.css">
+    <!-- Datatables-->
+    <link rel="stylesheet" href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css">
+    <link rel="stylesheet" href="assets/libs/datatables.net-responsive-bs/css/responsive.bootstrap.css">
+    <!-- =============== BOOTSTRAP STYLES ===============-->
+    <link rel="stylesheet" href="assets/css/bootstrap.css" id="bscss">
+    <!-- =============== THEME STYLES ===============-->
+    <link rel="stylesheet" href="assets/css/custom.css" id="maincss">
+    <script src="assets/js/ga.js"></script>
+
 </head>
 
 <body>
-    <ul class="menu">
-        <li><a href="/app/#!/dashboard">Dashboard</a></li>
-        <li><a href="/app/#!/location">Individual Location</a></li>
-    </ul>
+    <div class="wrapper">
+        <!-- top navbar-->
+        <header class="topnavbar-wrapper">
+            <!-- START Top Navbar-->
+            <nav class="navbar topnavbar">
+                <!-- START navbar header-->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="javascript:void(0)">
+                        <div class="brand-logo">
+                            <img class="img-fluid" src="assets/img/logo.png" alt="Logo">
+                        </div>
+                    </a>
+                </div>
+                <!-- END navbar header-->
+                <!-- START Left navbar-->
+                <ul class="navbar-nav mr-auto flex-row">
+                    <!-- START User avatar toggle-->
+                    <li class="nav-item d-none d-md-block">
+                        <!-- Button used to collapse the left sidebar. Only visible on tablet and desktops-->
+                        <a class="nav-link" id="user-block-toggle" href="javascript:void(0)" title="Account">
+                            <em class="icon-user"></em>
+                        </a>
+                    </li>
+                    <!-- END User avatar toggle-->
+                    <!-- START lock screen-->
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" href="javascript:void(0)" title="Lock screen">
+                            <em class="icon-lock"></em>
+                        </a>
+                    </li>
+                    <!-- END lock screen-->
+                </ul>
+                <!-- END Left navbar-->
+                <!-- START Right Navbar-->
+                <ul class="navbar-nav flex-row">
+                    <!-- Search icon-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" data-search-open="" title="Search">
+                            <em class="icon-magnifier"></em>
+                        </a>
+                    </li>
+                    <!-- Fullscreen (only desktops)-->
+                    <li class="nav-item d-none d-md-block">
+                        <a class="nav-link" href="javascript:void(0)" data-toggle-fullscreen="" title="Fullscreen">
+                            <em class="fa fa-expand"></em>
+                        </a>
+                    </li>
+                    <!-- START Alert menu-->
+                    <li class="nav-item dropdown dropdown-list">
+                        <a class="nav-link dropdown-toggle dropdown-toggle-nocaret" href="javascript:void(0)" data-toggle="dropdown" title="Notifications">
+                            <em class="icon-bell"></em>
+                            <span class="badge badge-danger">11</span>
+                        </a>
+                        <!-- START Dropdown menu-->
+                        <div class="dropdown-menu dropdown-menu-right animated flipInX">
+                            <div class="dropdown-item">
+                                <!-- START list group-->
+                                <div class="list-group">
+                                    <!-- list item-->
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="media">
+                                            <div class="align-self-start mr-2">
+                                                <em class="fa fa-twitter fa-2x text-info"></em>
+                                            </div>
+                                            <div class="media-body">
+                                                <p class="m-0">New followers</p>
+                                                <p class="m-0 text-muted text-sm">1 new follower</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- list item-->
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="media">
+                                            <div class="align-self-start mr-2">
+                                                <em class="fa fa-envelope fa-2x text-warning"></em>
+                                            </div>
+                                            <div class="media-body">
+                                                <p class="m-0">New e-mails</p>
+                                                <p class="m-0 text-muted text-sm">You have 10 new emails</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- list item-->
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="media">
+                                            <div class="align-self-start mr-2">
+                                                <em class="fa fa-tasks fa-2x text-success"></em>
+                                            </div>
+                                            <div class="media-body">
+                                                <p class="m-0">Pending Tasks</p>
+                                                <p class="m-0 text-muted text-sm">11 pending task</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- last list item-->
+                                    <div class="list-group-item list-group-item-action">
+                                        <span class="d-flex align-items-center">
+                                           <span class="text-sm">More notifications</span>
+                                        <span class="badge badge-danger ml-auto">14</span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <!-- END list group-->
+                            </div>
+                        </div>
+                        <!-- END Dropdown menu-->
+                    </li>
+                    <!-- END Alert menu-->
+                    <!-- START Offsidebar button-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="javascript:void(0)" data-toggle-state="offsidebar-open" data-no-persist="true" title="Themes">
+                            <em class="icon-notebook"></em>
+                        </a>
+                    </li>
+                    <!-- END Offsidebar menu-->
+                </ul>
+                <!-- END Right Navbar-->
+                <!-- START Search form-->
+                <form class="navbar-form" role="search" action="http://themicon.co/theme/angle/v3.8.8/html5jquery-bs4/app/search.html">
+                    <div class="form-group">
+                        <input class="form-control" type="text" placeholder="Type and hit enter ...">
+                        <div class="fa fa-times navbar-form-close" data-search-dismiss=""></div>
+                    </div>
+                    <button class="d-none" type="submit">Submit</button>
+                </form>
+                <!-- END Search form-->
+            </nav>
+            <!-- END Top Navbar-->
+        </header>
+        <!-- offsidebar-->
+        <aside class="offsidebar d-none">
+            <!-- START Off Sidebar (right)-->
+            <nav>
+                <div role="tabpanel">
+                    <!-- Tab panes-->
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show" id="app-settings" role="tabpanel">
+                            <div class="p-2">
+                                <h4 class="text-muted text-thin">Themes</h4>
+                                <div class="row row-flush mb-2">
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-a.css">
+                                    <input type="radio" name="setting-theme" checked="checked">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-info"></span>
+                                    <span class="color bg-info-light"></span>
+                                    </span>
+                                    <span class="color bg-white"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-b.css">
+                                    <input type="radio" name="setting-theme">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-green"></span>
+                                    <span class="color bg-green-light"></span>
+                                    </span>
+                                    <span class="color bg-white"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-c.css">
+                                    <input type="radio" name="setting-theme">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-purple"></span>
+                                    <span class="color bg-purple-light"></span>
+                                    </span>
+                                    <span class="color bg-white"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-d.css">
+                                    <input type="radio" name="setting-theme">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-danger"></span>
+                                    <span class="color bg-danger-light"></span>
+                                    </span>
+                                    <span class="color bg-white"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row row-flush mb-2">
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-e.css">
+                                    <input type="radio" name="setting-theme">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-info-dark"></span>
+                                    <span class="color bg-info"></span>
+                                    </span>
+                                    <span class="color bg-gray-dark"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-f.css">
+                                    <input type="radio" name="setting-theme">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-green-dark"></span>
+                                    <span class="color bg-green"></span>
+                                    </span>
+                                    <span class="color bg-gray-dark"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-g.css">
+                                    <input type="radio" name="setting-theme">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-purple-dark"></span>
+                                    <span class="color bg-purple"></span>
+                                    </span>
+                                    <span class="color bg-gray-dark"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-2">
+                                        <div class="setting-color">
+                                            <label data-load-css="assets/css/theme-h.css">
+                                    <input type="radio" name="setting-theme">
+                                    <span class="icon-check"></span>
+                                    <span class="split">
+                                                 <span class="color bg-danger-dark"></span>
+                                    <span class="color bg-danger"></span>
+                                    </span>
+                                    <span class="color bg-gray-dark"></span>
+                                  </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- END Off Sidebar (right)-->
+        </aside>
 
-    <!--[if lt IE 7]>
-      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-  <![endif]-->
+        <!-- Partial View -->
+        <div ng-view></div>
 
-    <div ng-view></div>
-
-    <div>
-        <h4>MyBBT AngularJS Heroku Testing App</h4>
+        <!-- Page footer-->
+        <footer class="footer-container">
+            <span>&copy; 2018 - MyBBT</span>
+        </footer>
     </div>
 
-    <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular-route.js"></script>
+    <!-- =============== SCRIPTS ===============-->
+    <script src="assets/libs/angular1.6.9.js"></script>
+    <script src="assets/libs/angular-animate.js"></script>
+    <script src="assets/libs/angular-route.js"></script>
     <script src="app.js"></script>
-    <!--     <script src="view1/view1.js"></script>
-    <script src="view2/view2.js"></script> -->
+    <script src="shared/layout/layout.js"></script>
     <script src="components/dashboard/dashboard.js"></script>
     <script src="components/dashboard/location.js"></script>
+    <!-- MODERNIZR-->
+    <script src="assets/libs/modernizr/modernizr.custom.js"></script>
+    <!-- JQUERY-->
+    <script src="assets/libs/jquery/dist/jquery.js"></script>
+    <!-- BOOTSTRAP-->
+    <script src="assets/libs/popper.js/dist/umd/popper.js"></script>
+    <script src="assets/libs/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- STORAGE API-->
+    <script src="assets/libs/js-storage/js.storage.js"></script>
+    <!-- JQUERY EASING-->
+    <script src="assets/libs/jquery.easing/jquery.easing.js"></script>
+    <!-- ANIMO-->
+    <script src="assets/libs/animo/animo.js"></script>
+    <!-- SCREENFULL-->
+    <script src="assets/libs/screenfull/dist/screenfull.js"></script>
+    <!-- LOCALIZE-->
+    <script src="assets/libs/jquery-localize/dist/jquery.localize.js"></script>
+    <!-- =============== PAGE js SCRIPTS ===============-->
+    <!-- SLIMSCROLL-->
+    <script src="assets/libs/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- SPARKLINE-->
+    <script src="assets/libs/jquery-sparkline/jquery.sparkline.js"></script>
+    <!-- Datatables-->
+    <script src="assets/libs/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/dataTables.buttons.js"></script>
+    <script src="assets/libs/datatables.net-buttons-bs/js/buttons.bootstrap.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.colVis.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.flash.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.html5.js"></script>
+    <script src="assets/libs/datatables.net-buttons/js/buttons.print.js"></script>
+    <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.js"></script>
+    <script src="assets/libs/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+    <!-- FLOT CHART-->
+    <script src="assets/libs/flot/jquery.flot.js"></script>
+    <script src="assets/libs/jquery.flot.tooltip/js/jquery.flot.tooltip.js"></script>
+    <script src="assets/libs/flot/jquery.flot.resize.js"></script>
+    <script src="assets/libs/flot/jquery.flot.pie.js"></script>
+    <script src="assets/libs/flot/jquery.flot.time.js"></script>
+    <script src="assets/libs/flot/jquery.flot.categories.js"></script>
+    <script src="assets/libs/jquery.flot.spline/jquery.flot.spline.js"></script>
+    <!-- EASY PIE CHART-->
+    <script src="assets/libs/easy-pie-chart/dist/jquery.easypiechart.js"></script>
+    <!-- MOMENT JS-->
+    <script src="assets/libs/moment/min/moment-with-locales.js"></script>
+    <!-- =============== APP SCRIPTS ===============-->
+    <script src="assets/js/custom.js"></script>
 </body>
 
 </html>
