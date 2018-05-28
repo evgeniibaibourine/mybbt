@@ -115,7 +115,7 @@ html {
 .content-wrapper .content-heading {
     display: flex;
     align-items: center;
-    font-size: 1.5rem;
+    font-size: 16px;
     line-height: 1.1;
     color: #929292;
     margin: -15px;
