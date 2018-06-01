@@ -8,73 +8,80 @@
 
         <div class="row">
             <div class="col-xl-4">
-                <!-- START List group-->
-                <div class="list-group mb-3">
-                    <div class="list-group-item">
-                        <div class="d-flex align-items-center py-3">
-                            <div class="w-50 px-3">
-                                <p class="m-0 lead">1204</p>
-                                <p class="m-0 text-sm">Commits this month</p>
-                            </div>
-                            <div class="w-50 px-3 text-center">
-                                <div data-sparkline="" data-bar-color="#23b7e5" data-height="60" data-bar-width="10" data-bar-spacing="6" data-chart-range-min="0" data-values="3,6,7,8,4,5"></div>
-                            </div>
+                <!-- START card-->
+                <div class="card border-0">
+                    <div class="row row-flush">
+                        <div class="col-2 bg-detail-one text-center d-flex align-items-center justify-content-center rounded-left">
+                            <em class="fa fa-money fa-2x"></em>
                         </div>
-                    </div>
-                    <div class="list-group-item">
-                        <div class="d-flex align-items-center py-3">
-                            <div class="w-50 px-3">
-                                <p class="m-0 lead">$ 3,200.00</p>
-                                <p class="m-0 text-sm">Available budget</p>
-                            </div>
-                            <div class="w-50 px-3 text-center">
-                                <div data-sparkline="" data-type="line" data-height="60" data-width="80%" data-line-width="2" data-line-color="#7266ba" data-chart-range-min="0" data-spot-color="#888" data-min-spot-color="#7266ba" data-max-spot-color="#7266ba" data-fill-color="" data-highlight-line-color="#fff"
-                                    data-spot-radius="3" data-values="7,3,4,7,5,9,4,4,7,5,9,6,4" data-resize="true"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list-group-item">
-                        <div class="d-flex align-items-center py-3">
-                            <div class="w-50 px-3">
-                                <p class="m-0 lead">67</p>
-                                <p class="m-0 text-sm">New followers</p>
-                            </div>
-                            <div class="w-50 px-3 text-center">
-                                <div class="d-flex align-items-center flex-wrap justify-content-center">
-                                    <!-- <a href="#" data-toggle="tooltip" title="Katie">
-                                     <img class="circle thumb24 mx-1" src="img/user/02.jpg" alt="Follower">
-                                  </a>
-                                  <a href="#" data-toggle="tooltip" title="Cody">
-                                     <img class="circle thumb24 mx-1" src="img/user/01.jpg" alt="Follower">
-                                  </a>
-                                  <a href="#" data-toggle="tooltip" title="Tamara">
-                                     <img class="circle thumb24 mx-1" src="img/user/03.jpg" alt="Follower">
-                                  </a>
-                                  <a href="#" data-toggle="tooltip" title="Gene">
-                                     <img class="circle thumb24 mx-1" src="img/user/04.jpg" alt="Follower">
-                                  </a>
-                                  <a href="#" data-toggle="tooltip" title="Marsha">
-                                     <img class="circle thumb24 mx-1" src="img/user/04.jpg" alt="Follower">
-                                  </a>
-                                  <a href="#" data-toggle="tooltip" title="Robin">
-                                     <img class="circle thumb24 mx-1" src="img/user/09.jpg" alt="Follower">
-                                  </a> -->
-                                </div>
+                        <div class="col-10">
+                            <div class="card-body text-center">
+                                <h3 class="mt-0">{{ remittanceDetails.sum }}</h3>
+                                <p class="mb-0 text-muted">Total Remittance YTD</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- END List group-->
+                <!-- END card-->
+
+                <!-- START card-->
+                <div class="card border-0">
+                    <div class="row row-flush">
+                        <div class="col-2 bg-detail-two text-center d-flex align-items-center justify-content-center rounded-left">
+                            <em class="icon-graph fa-2x"></em>
+                        </div>
+                        <div class="col-10">
+                            <div class="card-body text-center">
+                                <h3 class="mt-0">{{ goalPercentage | number: 2 }}%</h3>
+                                <p class="mb-0 text-muted">Percentage of Goal</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END card-->
+
+                <!-- START card-->
+                <div class="card border-0">
+                    <div class="row row-flush">
+                        <div class="col-2 bg-detail-three text-center d-flex align-items-center justify-content-center rounded-left">
+                            <em class="icon-bell fa-2x"></em>
+                        </div>
+                        <div class="col-10">
+                            <div class="card-body text-center">
+                                <h3 class="mt-0">{{ remittanceDetails.uniqueTemples }}</h3>
+                                <p class="mb-0 text-muted">Unique Temples</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END card-->
+
+                <!-- START card-->
+                <div class="card border-0">
+                    <div class="row row-flush">
+                        <div class="col-2 bg-detail-four text-center d-flex align-items-center justify-content-center rounded-left">
+                            <em class="icon-trophy fa-2x"></em>
+                        </div>
+                        <div class="col-10">
+                            <div class="card-body text-center">
+                                <h3 class="mt-0" ng-if="successfulTemples > 0">{{ successfullTemples }}</h3>
+                                <h3 class="mt-0" ng-if="successfulTemples == 0">0</h3>
+                                <p class="mb-0 text-muted">Temples met their goals</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END card-->
             </div>
             <div class="col-xl-8">
                 <!-- START USA Map-->
                 <div class="card" id="cardChart3">
                     <div class="card-header">
-                        <div class="card-title">USA</div>
+                        <div class="card-title">Remittance in USA</div>
                     </div>
                     <div class="card-wrapper">
                         <div class="card-body">
-                            <div id="chartdiv"></div>
+                            <usa-remittance-map model="templeDetails"></usa-remittance-map>
                         </div>
                     </div>
                 </div>
@@ -93,7 +100,7 @@
                     </div>
                     <div class="card-wrapper collapse show">
                         <div class="card-body">
-                            <div class="col-3">
+                            <div class="col-12 col-sm-8 col-md-6 col-lg-3 mb-2">
                                 <span class="dt-month-switch">Showing 
                                 <select class="custom-select custom-select-md month-switcher-select" ng-init="selectedTempleDetailsMonth = monthArray[monthArray.length - 1]" ng-model="selectedTempleDetailsMonth" ng-options="month for month in monthArray" ng-change="monthSwitcher(selectedTempleDetailsMonth)">
                                 </select> details</span>
@@ -168,215 +175,3 @@
         <!-- Chart Ends Here -->
     </div>
 </section>
-
-<!-- Chart code -->
-<script>
-    var latlong = {};
-    latlong["US"] = {
-        "latitude": 38,
-        "longitude": -97
-    };
-
-    var mapData = [{
-        "code": "US",
-        "name": "United States",
-        "value": 43313085380,
-        "color": "#a7a737"
-    }];
-
-
-    // get min and max values
-    var minBulletSize = 3;
-    var maxBulletSize = 70;
-    var min = Infinity;
-    var max = -Infinity;
-    for (var i = 0; i < mapData.length; i++) {
-        var value = mapData[i].value;
-        if (value < min) {
-            min = value;
-        }
-        if (value > max) {
-            max = value;
-        }
-    }
-
-    // it's better to use circle square to show difference between values, not a radius
-    var maxSquare = maxBulletSize * maxBulletSize * 2 * Math.PI;
-    var minSquare = minBulletSize * minBulletSize * 2 * Math.PI;
-
-    // create circle for each country
-    var images = [];
-    for (var i = 0; i < mapData.length; i++) {
-        var dataItem = mapData[i];
-        var value = dataItem.value;
-        // calculate size of a bubble
-        var square = (value - min) / (max - min) * (maxSquare - minSquare) + minSquare;
-        if (square < minSquare) {
-            square = minSquare;
-        }
-        var size = Math.sqrt(square / (Math.PI * 2));
-        var id = dataItem.code;
-
-        images.push({
-            "type": "circle",
-            "theme": "none",
-            "width": size,
-            "height": size,
-            "color": dataItem.color,
-            "longitude": latlong[id].longitude,
-            "latitude": latlong[id].latitude,
-            "title": dataItem.name,
-            "value": value
-        });
-    }
-
-    // build map
-    /* var map = AmCharts.makeChart("chartdiv", {
-        "type": "map",
-        "projection": "eckert6",
-        "titles": [{
-            "text": "Population of the World in 2011",
-            "size": 14
-        }, {
-            "text": "source: Gapminder",
-            "size": 11
-        }],
-        "areasSettings": {
-            //"unlistedAreasColor": "#000000",
-            //"unlistedAreasAlpha": 0.1
-        },
-        "dataProvider": {
-            "map": "worldLow",
-            "images": images
-        },
-        "export": {
-            "enabled": false
-        }
-    }); */
-
-    // ===================================== USA MAP STARTS FROM HERE ==================================//
-
-    var map = AmCharts.makeChart("chartdiv", {
-        "type": "map",
-        "theme": "light",
-        "titles": [{
-            "text": "Remittances in USA",
-            "size": 14
-        }],
-
-        "dataProvider": {
-            "map": "usaLow",
-            "images": images,
-            "areas": [{
-                "id": "US-AL"
-            }, {
-                "id": "US-AK"
-            }, {
-                "id": "US-AZ"
-            }, {
-                "id": "US-AR"
-            }, {
-                "id": "US-CA"
-            }, {
-                "id": "US-CO"
-            }, {
-                "id": "US-CT"
-            }, {
-                "id": "US-DE"
-            }, {
-                "id": "US-FL"
-            }, {
-                "id": "US-GA"
-            }, {
-                "id": "US-HI"
-            }, {
-                "id": "US-ID"
-            }, {
-                "id": "US-IL"
-            }, {
-                "id": "US-IN"
-            }, {
-                "id": "US-IA"
-            }, {
-                "id": "US-KS"
-            }, {
-                "id": "US-KY"
-            }, {
-                "id": "US-LA"
-            }, {
-                "id": "US-ME"
-            }, {
-                "id": "US-MD"
-            }, {
-                "id": "US-MA"
-            }, {
-                "id": "US-MI"
-            }, {
-                "id": "US-MN"
-            }, {
-                "id": "US-MS"
-            }, {
-                "id": "US-MO"
-            }, {
-                "id": "US-MT"
-            }, {
-                "id": "US-NE"
-            }, {
-                "id": "US-NV"
-            }, {
-                "id": "US-NH"
-            }, {
-                "id": "US-NJ"
-            }, {
-                "id": "US-NM"
-            }, {
-                "id": "US-NY"
-            }, {
-                "id": "US-NC"
-            }, {
-                "id": "US-ND"
-            }, {
-                "id": "US-OH"
-            }, {
-                "id": "US-OK"
-            }, {
-                "id": "US-OR"
-            }, {
-                "id": "US-PA"
-            }, {
-                "id": "US-RI"
-            }, {
-                "id": "US-SC"
-            }, {
-                "id": "US-SD"
-            }, {
-                "id": "US-TN"
-            }, {
-                "id": "US-TX"
-            }, {
-                "id": "US-UT"
-            }, {
-                "id": "US-VT"
-            }, {
-                "id": "US-VA"
-            }, {
-                "id": "US-WA"
-            }, {
-                "id": "US-WV"
-            }, {
-                "id": "US-WI"
-            }, {
-                "id": "US-WY"
-            }]
-        },
-
-        "areasSettings": {
-            "autoZoom": true
-        },
-
-        "export": {
-            "enabled": false
-        }
-
-    });
-</script>

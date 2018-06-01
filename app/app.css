@@ -51,5 +51,54 @@ tooltip {
 
 #chartdiv {
     width: 100%;
-    height: 500px;
+    height: 334px;
+}
+
+.bg-detail-one {
+    background-color: #798E94;
+    color: #fff!important;
+}
+
+.bg-detail-two {
+    background-color: #f1d7b9;
+    color: #fff!important;
+}
+
+.bg-detail-three {
+    background-color: #b4bfbf;
+    color: #fff!important;
+}
+
+.bg-detail-four {
+    background-color: #dbd5c5;
+    color: #fff!important;
+}
+
+.bg-detail-five {
+    background-color: #ebdf92;
+    color: #fff!important;
+}
+
+.bg-detail-six {
+    background-color: #cfd3ca;
+    color: #fff!important;
+}
+
+.page-item.active .page-link {
+    background-color: #798E94!important;
+    border-color: #798E94!important;
+    color: #fff!important;
+}
+
+.page-link {
+    color: #798E94!important;
+}
+
+.amcharts-chart-div>a {
+    display: none!important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(219, 213, 197, 0.38)!important;
+    cursor: pointer;
 }

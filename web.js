@@ -1,4 +1,3 @@
-
 // web.js
 var gzippo = require('gzippo');
 var express = require("express");
@@ -43,12 +42,29 @@ function handleError(res, reason, message, code) {
 
 
 //ACTUAL SERVER.JS CODE ==== THESE ARE THE REAL ROUTES FOR THE APP
-function getSum(array) {
+function getSum(array, field = "Remittance") {
     return array.map((record) => {
-        return parseFloat(record.Remittance);
+        var val = record[field];
+        if (typeof val === "string") {
+            //get rid of commas if they exist
+            val = parseFloat(val.replace(/,/g, ''));
+        }
+        return val;
     }).reduce((a, b) => {
         return a + b;
     }, 0);
+}
+
+function getMax(array, field = "Remittance") {
+    valArray = array.map((record) => {
+        var val = record[field];
+        if (typeof val === "string") {
+            //get rid of commas if they exist
+            val = parseFloat(val.replace(/,/g, ''));
+        }
+        return val;
+    });
+    return Math.max(...valArray);
 }
 
 function getDataFromDb(search /*MongoDB search obj*/ , strict /*fail if 0 results*/ ) {
@@ -85,7 +101,7 @@ app.get("/api/remittances", function(req, res) {
             return res.status(200).json({
                 data: doc,
                 sum: getSum(doc),
-                max: Math.max(...doc.map(o => o.Remittance))
+                max: getMax(doc)
             });
         }
     });
@@ -95,7 +111,7 @@ app.get("/api/dashboard", function(req, res) {
     let now = moment();
     let monthNumber = moment().month();
     let thisMonth = moment().month(monthNumber).format('MMMM');
-    let thisYear = 2017; // now.year();  // <-- use this because we don't have 2018 data yet 
+    let thisYear = 2017; // now.year();  // <-- use this because we don't have 2018 data yet
     let lastYear = moment().subtract(1, 'year');
     let ret = {};
     let uniqueTemples;
@@ -151,7 +167,7 @@ app.get("/api/remittances/temple/:temple", function(req, res) {
             return res.status(200).json({
                 data: doc,
                 sum: getSum(doc),
-                max: Math.max(...doc.map(o => o.Remittance))
+                max: getMax(doc)
             });
         }
     });
@@ -167,7 +183,7 @@ app.get("/api/remittances/year/:year/:temple", function(req, res) {
                 return res.status(200).json({
                     data: doc,
                     sum: getSum(doc),
-                    max: Math.max(...doc.map(o => o.Remittance))
+                    max: getMax(doc)
                 });
             }
         });
@@ -183,7 +199,7 @@ app.get("/api/remittances/year/:year", function(req, res) {
                 return res.status(200).json({
                     data: doc,
                     sum: getSum(doc),
-                    max: Math.max(...doc.map(o => o.Remittance))
+                    max: getMax(doc)
                 });
             }
         });
@@ -197,7 +213,7 @@ app.get("/api/remittances/gbc/:gbc", function(req, res) {
             return res.status(200).json({
                 data: doc,
                 sum: getSum(doc),
-                max: Math.max(...doc.map(o => o.Remittance))
+                max: getMax(doc)
             });
         }
     });
@@ -211,7 +227,7 @@ app.get("/api/remittances/:year/:month", function(req, res) {
             return res.status(200).json({
                 data: doc,
                 sum: getSum(doc),
-                max: Math.max(...doc.map(o => o.Remittance))
+                max: getMax(doc)
             });
         }
     });
@@ -227,7 +243,7 @@ app.get("/api/remittances/:year/:month/:temple", function(req, res) {
                 return res.status(200).json({
                     data: doc,
                     sum: getSum(doc),
-                    max: Math.max(...doc.map(o => o.Remittance))
+                    max: getMax(doc)
                 });
             }
         });

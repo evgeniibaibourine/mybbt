@@ -22,7 +22,7 @@ angular.module('myApp.dashboard.temple', [
     $scope.remProgress = $localStorage.templeDetail.remittanceProgress;
 
     var templeDetails = [];
-    var totalGoal = 0;
+    var totalGoal = $localStorage.currentYearGoal;
     var currentdate = new Date();
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var templeHistory = [];
@@ -31,18 +31,7 @@ angular.module('myApp.dashboard.temple', [
     var currentYearMonthlyRem = [];
     var prevYearMonthlyRem = [];
 
-    service.getTempleDetails().then(function(response) {
-        templeDetails = response;
-
-        // Total 2018 Goal
-        angular.forEach(templeDetails, function(value, key) {
-            totalGoal = parseInt(value.yearlyGoal) + totalGoal;
-        });
-
-        $scope.constructPieChart();
-        $scope.generateTempleMap();
-    });
-
+    // Method to Change ProgressBar colors depending upon the Percentage
     $scope.progressColor = function(value) {
         $scope.class;
         if (value < 20) {
@@ -56,29 +45,27 @@ angular.module('myApp.dashboard.temple', [
     };
 
     // Pie Chart Starts Here
-    $scope.constructPieChart = function() {
-        $scope.pieLabels = ["2018 YTD Remittance", "2018 Goal"];
-        $scope.pieColors = [{
-            backgroundColor: '#27c24c',
-            pointBackgroundColor: '#27c24c',
-            pointHoverBackgroundColor: '#27c24c',
-            borderColor: '#27c24c',
-            pointBorderColor: '#fff',
-            pointHoverBorderColor: '#27c24c'
-        }, {
-            backgroundColor: '#f05050',
-            pointBackgroundColor: '#f05050',
-            pointHoverBackgroundColor: '#f05050',
-            borderColor: '#f05050',
-            pointBorderColor: '#fff',
-            pointHoverBorderColor: '#f05050'
-        }];
-        $scope.pieData = [$scope.ytdRemittance, totalGoal];
-        $scope.pieOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            legend: { display: true, position: 'bottom' }
-        };
+    $scope.pieLabels = ["2018 YTD Remittance", "2018 Goal"];
+    $scope.pieColors = [{
+        backgroundColor: '#b4bfbf',
+        pointBackgroundColor: '#b4bfbf',
+        pointHoverBackgroundColor: '#b4bfbf',
+        borderColor: '#b4bfbf',
+        pointBorderColor: '#fff',
+        pointHoverBorderColor: '#b4bfbf'
+    }, {
+        backgroundColor: '#f1d7b9',
+        pointBackgroundColor: '#f1d7b9',
+        pointHoverBackgroundColor: '#f1d7b9',
+        borderColor: '#f1d7b9',
+        pointBorderColor: '#fff',
+        pointHoverBorderColor: '#f1d7b9'
+    }];
+    $scope.pieData = [$scope.ytdRemittance, totalGoal];
+    $scope.pieOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: { display: true, position: 'bottom' }
     };
     // Pie Chart Ends Here
 
@@ -103,52 +90,52 @@ angular.module('myApp.dashboard.temple', [
         $scope.barLabels = templeHistoryMonths;
         $scope.barSeries = [$scope.templeName];
         $scope.barColors = [{
-                backgroundColor: '#F1C40F',
-                pointBackgroundColor: '#F1C40F',
-                pointHoverBackgroundColor: '#F1C40F',
-                borderColor: '#F1C40F',
+                backgroundColor: '#dbd5c5',
+                pointBackgroundColor: '#dbd5c5',
+                pointHoverBackgroundColor: '#dbd5c5',
+                borderColor: '#dbd5c5',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#F1C40F'
+                pointHoverBorderColor: '#dbd5c5'
             },
             {
-                backgroundColor: '#3a3f51',
-                pointBackgroundColor: '#3a3f51',
-                pointHoverBackgroundColor: '#3a3f51',
-                borderColor: '#3a3f51',
+                backgroundColor: '#798e93',
+                pointBackgroundColor: '#798e93',
+                pointHoverBackgroundColor: '#798e93',
+                borderColor: '#798e93',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#3a3f51'
+                pointHoverBorderColor: '#798e93'
             },
             {
-                backgroundColor: '#ec2121',
-                pointBackgroundColor: '#ec2121',
-                pointHoverBackgroundColor: '#ec2121',
-                borderColor: '#ec2121',
+                backgroundColor: '#f1d7b9',
+                pointBackgroundColor: '#f1d7b9',
+                pointHoverBackgroundColor: '#f1d7b9',
+                borderColor: '#f1d7b9',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#ec2121'
+                pointHoverBorderColor: '#f1d7b9'
             },
             {
-                backgroundColor: '#27c24c',
-                pointBackgroundColor: '#27c24c',
-                pointHoverBackgroundColor: '#27c24c',
-                borderColor: '#27c24c',
+                backgroundColor: '#b4bfbf',
+                pointBackgroundColor: '#b4bfbf',
+                pointHoverBackgroundColor: '#b4bfbf',
+                borderColor: '#b4bfbf',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#27c24c'
+                pointHoverBorderColor: '#b4bfbf'
             },
             {
-                backgroundColor: '#e90bd6',
-                pointBackgroundColor: '#e90bd6',
-                pointHoverBackgroundColor: '#e90bd6',
-                borderColor: '#e90bd6',
+                backgroundColor: '#ebdf92',
+                pointBackgroundColor: '#ebdf92',
+                pointHoverBackgroundColor: '#ebdf92',
+                borderColor: '#ebdf92',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#e90bd6'
+                pointHoverBorderColor: '#ebdf92'
             },
             {
-                backgroundColor: '#2ed6e5',
-                pointBackgroundColor: '#2ed6e5',
-                pointHoverBackgroundColor: '#2ed6e5',
-                borderColor: '#2ed6e5',
+                backgroundColor: '#e3e8d2',
+                pointBackgroundColor: '#e3e8d2',
+                pointHoverBackgroundColor: '#e3e8d2',
+                borderColor: '#e3e8d2',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#2ed6e5'
+                pointHoverBorderColor: '#e3e8d2'
             }
         ];
         $scope.barData = templeHistoryRemittances;
@@ -164,11 +151,11 @@ angular.module('myApp.dashboard.temple', [
     $scope.lineLabels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
     for (var i = 0; i < months.length; i++) {
 
-        service.getTempleMonthlyRemittance(months[i], currentdate.getFullYear() - 1).then(function(response) {
+        service.getMonthlyRemittanceOfTemple(months[i], currentdate.getFullYear() - 1).then(function(response) {
             currentYearMonthlyRem.push(response.data.sum);
         });
 
-        service.getTempleMonthlyRemittance(months[i], currentdate.getFullYear() - 2).then(function(response) {
+        service.getMonthlyRemittanceOfTemple(months[i], currentdate.getFullYear() - 2).then(function(response) {
             prevYearMonthlyRem.push(response.data.sum);
         });
     }
@@ -184,50 +171,48 @@ angular.module('myApp.dashboard.temple', [
     // Line Chart Ends Here
 
     // Google Maps Code Starts From Here
-    $scope.generateTempleMap = function() {
-        //Data
-        var templeData = {
-            temple: $scope.templeName,
-            lat: $localStorage.templeDetail.latitude,
-            long: $localStorage.templeDetail.longitude
-        };
+    // Temple Data
+    var templeData = {
+        temple: $scope.templeName,
+        lat: $localStorage.templeDetail.latitude,
+        long: $localStorage.templeDetail.longitude
+    };
 
-        var mapOptions = {
-            zoom: 4,
-            center: new google.maps.LatLng($localStorage.templeDetail.latitude, $localStorage.templeDetail.longitude),
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
+    var mapOptions = {
+        zoom: 4,
+        center: new google.maps.LatLng($localStorage.templeDetail.latitude, $localStorage.templeDetail.longitude),
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
 
-        $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    $scope.map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-        $scope.markers = [];
+    $scope.markers = [];
 
-        var infoWindow = new google.maps.InfoWindow();
+    var infoWindow = new google.maps.InfoWindow();
 
-        var createMarker = function(info) {
+    var createMarker = function(info) {
 
-            var marker = new google.maps.Marker({
-                map: $scope.map,
-                position: new google.maps.LatLng(info.lat, info.long),
-                title: info.temple
-            });
-            marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
+        var marker = new google.maps.Marker({
+            map: $scope.map,
+            position: new google.maps.LatLng(info.lat, info.long),
+            title: info.temple
+        });
+        marker.content = '<div class="infoWindowContent">' + info.desc + '</div>';
 
-            google.maps.event.addListener(marker, 'click', function() {
-                infoWindow.setContent('<h5>' + marker.title + '</h5>');
-                infoWindow.open($scope.map, marker);
-            });
+        google.maps.event.addListener(marker, 'click', function() {
+            infoWindow.setContent('<h5>' + marker.title + '</h5>');
+            infoWindow.open($scope.map, marker);
+        });
 
-            $scope.markers.push(marker);
+        $scope.markers.push(marker);
 
-        }
+    }
 
-        createMarker(templeData);
+    createMarker(templeData);
 
-        $scope.openInfoWindow = function(e, selectedMarker) {
-            e.preventDefault();
-            google.maps.event.trigger(selectedMarker, 'click');
-        };
+    $scope.openInfoWindow = function(e, selectedMarker) {
+        e.preventDefault();
+        google.maps.event.trigger(selectedMarker, 'click');
     };
     // Google Maps Code Ends Here
 
