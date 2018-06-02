@@ -5,6 +5,7 @@ angular.module('myApp.dashboard', [
     '720kb.tooltips',
     'datatables',
     'chart.js',
+    'angular.filter',
     'myApp.dashboard.service'
 ])
 
@@ -131,7 +132,6 @@ angular.module('myApp.dashboard', [
             var latlong = {};
             var mapData = [];
             var details = {};
-            // console.log(scope.templeDetails);
 
             scope.$watch('templeDetails', function(newData, oldData) {
                 if (newData) {
@@ -159,7 +159,7 @@ angular.module('myApp.dashboard', [
                                 "code": scope.templeDetails[i].temple,
                                 "name": scope.templeDetails[i].temple,
                                 "value": scope.templeDetails[i].yearlyRemittance,
-                                "color": "#798E94"
+                                "color": "#00805d"
                             };
 
                             mapData.push(details);
@@ -167,8 +167,8 @@ angular.module('myApp.dashboard', [
                     }
 
                     // get min and max values
-                    var minBulletSize = 8;
-                    var maxBulletSize = 30;
+                    var minBulletSize = 15;
+                    var maxBulletSize = 35;
                     var min = Infinity;
                     var max = -Infinity;
                     for (var i = 0; i < mapData.length; i++) {
@@ -198,17 +198,21 @@ angular.module('myApp.dashboard', [
                         var size = Math.sqrt(square / (Math.PI * 2));
                         var id = dataItem.code;
 
-                        images.push({
-                            "type": "circle",
-                            "theme": "none",
-                            "width": size,
-                            "height": size,
-                            "color": dataItem.color,
-                            "longitude": latlong[id].longitude,
-                            "latitude": latlong[id].latitude,
-                            "title": dataItem.name,
-                            "value": value
-                        });
+                        if (scope.templeDetails.length > 0) {
+                            images.push({
+                                "type": "circle",
+                                "theme": "none",
+                                "width": size,
+                                "height": size,
+                                "color": dataItem.color,
+                                "longitude": latlong[id].longitude,
+                                "latitude": latlong[id].latitude,
+                                "title": dataItem.name,
+                                "value": value
+                            });
+                        } else {
+                            images = [];
+                        }
                     }
 
                     var initChart = function() {
@@ -219,8 +223,8 @@ angular.module('myApp.dashboard', [
                             theme: "light",
                             areasSettings: {
                                 autoZoom: false,
-                                color: "#dbd5c5",
-                                rollOverColor: "#bdb9ae"
+                                color: "#78ead3",
+                                rollOverColor: "#36cae8"
                             },
                             dataProvider: {
                                 map: "usa2Low",
@@ -233,16 +237,14 @@ angular.module('myApp.dashboard', [
                         });
                     }
 
-                    if (scope.templeDetails.length > 0) {
-                        initChart();
-                    }
+                    initChart();
                 }
             }, true);
         }
     }
 })
 
-.controller('DashboardCtrl', ['$scope', 'dashboardService', 'DTOptionsBuilder', '$localStorage', function($scope, service, DTOptionsBuilder, $localStorage) {
+.controller('DashboardCtrl', ['$scope', 'dashboardService', 'DTOptionsBuilder', '$localStorage', '$filter', function($scope, service, DTOptionsBuilder, $localStorage, $filter) {
 
     // Temple Details Datatable Starts Here
     $scope.templeDetails = [];
@@ -251,9 +253,10 @@ angular.module('myApp.dashboard', [
     $scope.remittanceDetails = {};
     $scope.goalPercentage = 0;
     $scope.successfulTemples = 0;
+    $scope.currentYear = service.currentYear;
 
-    var totalGoal = 0;
-    var totalYTDRemittance = 0;
+    $scope.totalGoal = 0;
+    $scope.totalYTDRemittance = 0;
     var currentdate = new Date();
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var currentMonth = currentdate.getMonth();
@@ -275,10 +278,10 @@ angular.module('myApp.dashboard', [
         $scope.templeDetails = details;
 
         // Total 2018 Goal
-        totalGoal = $localStorage.currentYearGoal;
+        $scope.totalGoal = $localStorage.currentYearGoal;
 
         // 2018 Total YTD Remittance
-        totalYTDRemittance = $localStorage.currentYearYTDRemmittance;
+        $scope.totalYTDRemittance = $localStorage.currentYearYTDRemmittance;
 
         // Current Year's Percentage of Goal
         $scope.goalPercentage = $localStorage.goalPercentage;
@@ -316,23 +319,23 @@ angular.module('myApp.dashboard', [
 
     // Pie Chart Starts Here
     $scope.constructPieChart = function() {
-        $scope.pieLabels = ["2018 YTD Remittance", "2018 Goal"];
+        $scope.pieLabels = [service.currentYear + " YTD Remittance", service.currentYear + " Goal"];
         $scope.pieColors = [{
-            backgroundColor: '#f1d7b9',
-            pointBackgroundColor: '#f1d7b9',
-            pointHoverBackgroundColor: '#f1d7b9',
-            borderColor: '#f1d7b9',
+            backgroundColor: '#00805d',
+            pointBackgroundColor: '#00805d',
+            pointHoverBackgroundColor: '#00805d',
+            borderColor: '#00805d',
             pointBorderColor: '#fff',
-            pointHoverBorderColor: '#f1d7b9'
+            pointHoverBorderColor: '#00805d'
         }, {
-            backgroundColor: '#b4bfbf',
-            pointBackgroundColor: '#b4bfbf',
-            pointHoverBackgroundColor: '#b4bfbf',
-            borderColor: '#b4bfbf',
+            backgroundColor: '#f88451',
+            pointBackgroundColor: '#f88451',
+            pointHoverBackgroundColor: '#f88451',
+            borderColor: '#f88451',
             pointBorderColor: '#fff',
-            pointHoverBorderColor: '#b4bfbf'
+            pointHoverBorderColor: '#f88451'
         }];
-        $scope.pieData = [totalYTDRemittance, totalGoal];
+        $scope.pieData = [$scope.totalYTDRemittance, $scope.totalGoal];
         $scope.pieOptions = {
             responsive: true,
             maintainAspectRatio: false,
@@ -344,8 +347,8 @@ angular.module('myApp.dashboard', [
     // Line Chart Starts Here
     $scope.constructLineChart = function() {
         $scope.lineLabels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        $scope.lineSeries = ['2018', '2017'];
-        $scope.lineColors = ['#717984', '#F1C40F', '#3498DB', '#72C02C'];
+        $scope.lineSeries = [service.currentYear, service.previousYear];
+        $scope.lineColors = ['#dd0d03', '#36cae8', '#3498DB', '#72C02C'];
         $scope.lineData = [$scope.remittanceDetails.currentYearMonthlyRem, $scope.remittanceDetails.previousYearMonthlyRem];
         $scope.lineOptions = {
             responsive: true,

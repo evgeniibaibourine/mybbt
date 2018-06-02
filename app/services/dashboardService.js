@@ -23,9 +23,9 @@ angular.module('myApp.dashboard.service', [
         var currentdate = new Date();
         var currentMonth = currentdate.getMonth();
         // Here Current Year is 2017. Remove "- 1" from the end when you'll have 2018 data
-        var currentYear = currentdate.getFullYear() - 1;
+        service.currentYear = currentdate.getFullYear() - 1;
         // Here Previous Year is 2016. Change "- 2" from the end to "- 1" when you'll have 2018 data
-        var previousYear = currentdate.getFullYear() - 2;
+        service.previousYear = currentdate.getFullYear() - 2;
 
 
         // Gets Temple Details for Dashboard View
@@ -39,25 +39,36 @@ angular.module('myApp.dashboard.service', [
                 var goalPercentage = 0; // for Percentage of Goal
 
                 angular.forEach(response.data, function(value, key) {
-                    for (var i in value) {
-                        details = {
-                            "temple": key,
-                            "yearlyGoal": value.goal,
-                            "yearlyRemittance": value.ytd,
-                            "remittanceProgress": value.ytd / value.goal * 100,
-                            "currentRemittance": value.currentMonth[0].Remittance,
-                            "monthlyGoal": value.goal / 12,
-                            "country": value.currentMonth[0].Country,
-                            "latitude": value.currentMonth[0].Lat,
-                            "longitude": value.currentMonth[0].Lng
-                        };
+                    if (value.currentMonth.length > 0) {
+                        for (var i in value) {
+                            details = {
+                                "temple": key,
+                                "yearlyGoal": value.goal,
+                                "yearlyRemittance": value.ytd,
+                                "remittanceProgress": value.ytd / value.goal * 100,
+                                "currentRemittance": value.currentMonth[0].Remittance,
+                                "monthlyGoal": value.goal / 12,
+                                "country": value.currentMonth[0].Country,
+                                "latitude": value.currentMonth[0].Lat,
+                                "longitude": value.currentMonth[0].Lng
+                            };
+                        }
+                        templeDetailsArray.push(details);
+                        currentYearGoal = parseInt(value.goal) + currentYearGoal;
+                        currentYearYTDRem = parseInt(value.ytd) + currentYearYTDRem;
+                    } else {
+                        templeDetailsArray = [];
+                        currentYearGoal = 0;
+                        currentYearYTDRem = 0;
                     }
-                    templeDetailsArray.push(details);
-                    currentYearGoal = parseInt(value.goal) + currentYearGoal;
-                    currentYearYTDRem = parseInt(value.ytd) + currentYearYTDRem;
                 });
+
                 deferred.resolve(templeDetailsArray);
-                goalPercentage = (currentYearYTDRem / currentYearGoal) * 100;
+                if (currentYearYTDRem > 0 && currentYearGoal > 0) {
+                    goalPercentage = (currentYearYTDRem / currentYearGoal) * 100;
+                } else {
+                    goalPercentage = 0;
+                }
                 // Storing variables in Local Storage for better app speed
                 $localStorage.currentYearYTDRemmittance = currentYearYTDRem;
                 $localStorage.currentYearGoal = currentYearGoal;
@@ -75,7 +86,7 @@ angular.module('myApp.dashboard.service', [
             var uniqueTemples = 0;
             var total2018YTDRem = 0;
 
-            $http.get(baseUrl + '/remittances/year/' + currentYear).then(function(response) {
+            $http.get(baseUrl + '/remittances/year/' + service.currentYear).then(function(response) {
 
                     var remCount = 0;
                     var temp = 0;
@@ -111,7 +122,7 @@ angular.module('myApp.dashboard.service', [
                         }
                     });
                     total2018YTDRem = response.data.sum;
-                    return $http.get(baseUrl + '/remittances/year/' + previousYear);
+                    return $http.get(baseUrl + '/remittances/year/' + service.previousYear);
                 })
                 .then(function(response) {
                     var remCount = 0;
@@ -146,9 +157,9 @@ angular.module('myApp.dashboard.service', [
         service.getSuccessfulTemples = function() {
             var deferred = $q.defer();
 
-            if(allTemples.length > 0){
+            if (allTemples.length > 0) {
                 for (var i = 0; i < allTemples.length; i++) {
-                    $http.get(baseUrl + '/remittances/year/' + currentYear + '/' + allTemples[i]).then(function(response) {
+                    $http.get(baseUrl + '/remittances/year/' + service.currentYear + '/' + allTemples[i]).then(function(response) {
                         var count = false;
                         var currRem = 0;
                         angular.forEach(response.data.data, function(value, key) {
@@ -160,14 +171,13 @@ angular.module('myApp.dashboard.service', [
                             } else {
                                 count = false;
                             }
-                            if(count == true){
+                            if (count == true) {
                                 service.successfulTemples++;
                             }
                         });
                     });
                 }
                 deferred.resolve(service.successfulTemples);
-                console.log(service.successfulTemples);
             }
             return deferred.promise;
         };
@@ -178,7 +188,7 @@ angular.module('myApp.dashboard.service', [
             var details = {};
             var templesArray = [];
 
-            $http.get(baseUrl + '/remittances/' + currentYear + '/' + month).then(function(response) {
+            $http.get(baseUrl + '/remittances/' + service.currentYear + '/' + month).then(function(response) {
 
                 var monthlyRem = [];
 
@@ -191,18 +201,22 @@ angular.module('myApp.dashboard.service', [
                 });
 
                 if (templeDetailsArray.length > 0) {
-                    for (var i = 0; i < templeDetailsArray.length; i++) {
-                        if (monthlyRem[i].temple === templeDetailsArray[i].temple) {
-                            templeDetailsArray[i].currentRemittance = monthlyRem[i].currentRemittance;
-                        } else {
-                            var index = -1;
-                            templeDetailsArray.some(function(obj, j) {
-                                return obj.temple === monthlyRem[i].temple ? index = j : false;
-                            });
-                            templeDetailsArray[index].currentRemittance = monthlyRem[i].currentRemittance;
+                    if (monthlyRem.length > 0) {
+                        for (var i = 0; i < templeDetailsArray.length; i++) {
+                            if (monthlyRem[i].temple === templeDetailsArray[i].temple) {
+                                templeDetailsArray[i].currentRemittance = monthlyRem[i].currentRemittance;
+                            } else {
+                                var index = -1;
+                                templeDetailsArray.some(function(obj, j) {
+                                    return obj.temple === monthlyRem[i].temple ? index = j : false;
+                                });
+                                templeDetailsArray[index].currentRemittance = monthlyRem[i].currentRemittance;
+                            }
                         }
+                        templesArray = templeDetailsArray;
+                    } else {
+                        templesArray = 0;
                     }
-                    templesArray = templeDetailsArray;
                 }
                 deferred.resolve(templesArray);
             });
@@ -217,12 +231,106 @@ angular.module('myApp.dashboard.service', [
 
         // Gets Remittance History for a specific Temple from Current Month for Temple View
         service.getTempleRemittanceHistory = function() {
-            return $http.get(baseUrl + '/remittances/history?months=10&location=' + $localStorage.templeDetail.temple);
+            var deferred = $q.defer();
+            var details = {};
+            var templeHistoryMonths = [];
+            var templeHistoryRemittances = [];
+            var templeRemHistory = [];
+
+            $http.get(baseUrl + '/remittances/history?months=6&location=' + $localStorage.templeDetail.temple).then(function(response) {
+
+                for (var i = 6; i >= 1; i--) {
+                    templeHistoryMonths.push(moment().subtract(i, "month").startOf("month").format('MMMM'));
+                }
+
+                for (var j = 0; j < 6; j++) {
+                    if (response.data.data[j]) {
+                        templeHistoryRemittances.push(parseInt(response.data.data[j].Remittance.toString().replace(/,/g, '')));
+                    } else {
+                        templeHistoryRemittances.push(0);
+                    }
+                }
+
+                details = {
+                    "templeHistoryMonths": templeHistoryMonths,
+                    "templeHistoryRemittances": templeHistoryRemittances
+                };
+
+                templeRemHistory.push(details);
+                deferred.resolve(templeRemHistory);
+            });
+            return deferred.promise;
         };
 
         // Gets Month-wise Remittances for a specific Temple in a specific Year for Temple View
-        service.getMonthlyRemittanceOfTemple = function(month, year) {
-            return $http.get(baseUrl + '/remittances/' + year + '/' + month + '/' + $localStorage.templeDetail.temple);
+        service.getYearlyRemittanceOfSpecificTemple = function() {
+            // return $http.get(baseUrl + '/remittances/' + year + '/' + month + '/' + $localStorage.templeDetail.temple);
+
+            var deferred = $q.defer();
+            var details = {};
+            var currYearRem = [];
+            var prevYearRem = [];
+
+            $http.get(baseUrl + '/remittances/year/' + service.currentYear + '/' + $localStorage.templeDetail.temple).then(function(response) {
+
+                    var remCount = 0;
+                    var temp = 0;
+                    var matchFound = false;
+                    var filteredMonthWiseData = [];
+
+                    filteredMonthWiseData.push($filter('groupBy')(response.data.data, 'Month'));
+                    angular.forEach(filteredMonthWiseData, function(value, key) {
+                        angular.forEach(value, function(item, itemKey) {
+                            if (itemKey === months[currentMonth]) {
+                                matchFound = true;
+                            } else {
+                                if (matchFound != true) {
+                                    for (var k = 0; k < item.length; k++) {
+                                        temp = parseInt(item[k].Remittance.toString().replace(/,/g, ''));
+                                        remCount = temp + remCount;
+                                    }
+                                    currYearRem.push(remCount);
+                                    remCount = 0;
+                                }
+                            }
+                        });
+                    });
+                    return $http.get(baseUrl + '/remittances/year/' + service.previousYear + '/' + $localStorage.templeDetail.temple);
+                })
+                .then(function(response) {
+                    var remCount = 0;
+                    var temp = 0;
+                    var filteredMonthWiseData = [];
+
+                    filteredMonthWiseData.push($filter('groupBy')(response.data.data, 'Month'));
+                    angular.forEach(filteredMonthWiseData, function(value, key) {
+                        angular.forEach(value, function(item, itemKey) {
+                            for (var k = 0; k < item.length; k++) {
+                                temp = parseInt(item[k].Remittance.toString().replace(/,/g, ''));
+                                remCount = temp + remCount;
+                            }
+                            prevYearRem.push(remCount);
+                            remCount = 0;
+                        });
+                    });
+                    details = {
+                        "currentYearMonthlyRem": currYearRem,
+                        "previousYearMonthlyRem": prevYearRem
+                    };
+                    deferred.resolve(details);
+                });
+            return deferred.promise;
+        };
+
+        // Gets Number of Remittances to Break a Record for a Temple for Temple View
+        service.getRemToBreakRecord = function() {
+            var deferred = $q.defer();
+
+            $http.get(baseUrl + '/remittances/temple/' + $localStorage.templeDetail.temple).then(function(response) {
+                var remToBreakRecord = response.data.max - $localStorage.templeDetail.currentRemittance;
+                deferred.resolve(remToBreakRecord);
+            });
+            return deferred.promise;
         };
     }
 

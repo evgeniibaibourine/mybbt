@@ -20,16 +20,19 @@ angular.module('myApp.dashboard.temple', [
     $scope.templeName = $localStorage.templeDetail.temple;
     $scope.ytdRemittance = $localStorage.templeDetail.yearlyRemittance;
     $scope.remProgress = $localStorage.templeDetail.remittanceProgress;
+    $scope.remToBreakRecord = 0;
 
     var templeDetails = [];
     var totalGoal = $localStorage.currentYearGoal;
     var currentdate = new Date();
     var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var templeHistory = [];
-    var templeHistoryMonths = [];
-    var templeHistoryRemittances = [];
-    var currentYearMonthlyRem = [];
-    var prevYearMonthlyRem = [];
+    var yearlyRemittanceOfTemple = {};
+
+
+    service.getRemToBreakRecord().then(function(response) {
+        $scope.remToBreakRecord = response;
+    });
 
     // Method to Change ProgressBar colors depending upon the Percentage
     $scope.progressColor = function(value) {
@@ -45,21 +48,21 @@ angular.module('myApp.dashboard.temple', [
     };
 
     // Pie Chart Starts Here
-    $scope.pieLabels = ["2018 YTD Remittance", "2018 Goal"];
+    $scope.pieLabels = [service.currentYear + " YTD Remittance", service.currentYear + " Goal"];
     $scope.pieColors = [{
-        backgroundColor: '#b4bfbf',
-        pointBackgroundColor: '#b4bfbf',
-        pointHoverBackgroundColor: '#b4bfbf',
-        borderColor: '#b4bfbf',
-        pointBorderColor: '#fff',
-        pointHoverBorderColor: '#b4bfbf'
+        backgroundColor: '#f88451',
+        pointBackgroundColor: '#f88451',
+        pointHoverBackgroundColor: '#f88451',
+        borderColor: '#f88451',
+        pointBorderColor: '#f88451',
+        pointHoverBorderColor: '#f88451'
     }, {
-        backgroundColor: '#f1d7b9',
-        pointBackgroundColor: '#f1d7b9',
-        pointHoverBackgroundColor: '#f1d7b9',
-        borderColor: '#f1d7b9',
+        backgroundColor: '#78ead3',
+        pointBackgroundColor: '#78ead3',
+        pointHoverBackgroundColor: '#78ead3',
+        borderColor: '#78ead3',
         pointBorderColor: '#fff',
-        pointHoverBorderColor: '#f1d7b9'
+        pointHoverBorderColor: '#78ead3'
     }];
     $scope.pieData = [$scope.ytdRemittance, totalGoal];
     $scope.pieOptions = {
@@ -71,63 +74,54 @@ angular.module('myApp.dashboard.temple', [
 
     // Bar Chart Starts Here
     service.getTempleRemittanceHistory().then(function(response) {
-        templeHistory = response.data;
-
-        angular.forEach(templeHistory, function(value, key) {
-            angular.forEach(value, function(item) {
-                if (item.Month && item.Remittance) {
-                    templeHistoryMonths.push(item.Month);
-                    templeHistoryRemittances.push(parseInt(item.Remittance));
-                }
-            });
-        });
+        templeHistory = response;
 
         $scope.constructBarChart();
     });
 
     $scope.constructBarChart = function() {
 
-        $scope.barLabels = templeHistoryMonths;
+        $scope.barLabels = templeHistory[0].templeHistoryMonths;
         $scope.barSeries = [$scope.templeName];
         $scope.barColors = [{
-                backgroundColor: '#dbd5c5',
-                pointBackgroundColor: '#dbd5c5',
-                pointHoverBackgroundColor: '#dbd5c5',
-                borderColor: '#dbd5c5',
+                backgroundColor: '#00805d',
+                pointBackgroundColor: '#00805d',
+                pointHoverBackgroundColor: '#00805d',
+                borderColor: '#00805d',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#dbd5c5'
+                pointHoverBorderColor: '#00805d'
             },
             {
-                backgroundColor: '#798e93',
-                pointBackgroundColor: '#798e93',
-                pointHoverBackgroundColor: '#798e93',
-                borderColor: '#798e93',
+                backgroundColor: '#f88451',
+                pointBackgroundColor: '#f88451',
+                pointHoverBackgroundColor: '#f88451',
+                borderColor: '#f88451',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#798e93'
+                pointHoverBorderColor: '#f88451'
             },
             {
-                backgroundColor: '#f1d7b9',
-                pointBackgroundColor: '#f1d7b9',
-                pointHoverBackgroundColor: '#f1d7b9',
-                borderColor: '#f1d7b9',
+                backgroundColor: '#78ead3',
+                pointBackgroundColor: '#78ead3',
+                pointHoverBackgroundColor: '#78ead3',
+                borderColor: '#78ead3',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#f1d7b9'
+                pointHoverBorderColor: '#78ead3'
             },
             {
-                backgroundColor: '#b4bfbf',
-                pointBackgroundColor: '#b4bfbf',
-                pointHoverBackgroundColor: '#b4bfbf',
-                borderColor: '#b4bfbf',
+                backgroundColor: '#dd0d03',
+                pointBackgroundColor: '#dd0d03',
+                pointHoverBackgroundColor: '#dd0d03',
+                borderColor: '#dd0d03',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#b4bfbf'
+                pointHoverBorderColor: '#dd0d03'
             },
             {
-                backgroundColor: '#ebdf92',
-                pointBackgroundColor: '#ebdf92',
-                pointHoverBackgroundColor: '#ebdf92',
-                borderColor: '#ebdf92',
+                backgroundColor: '#36cae8',
+                pointBackgroundColor: '#36cae8',
+                pointHoverBackgroundColor: '#36cae8',
+                borderColor: '#36cae8',
                 pointBorderColor: '#fff',
-                pointHoverBorderColor: '#ebdf92'
+                pointHoverBorderColor: '#36cae8'
             },
             {
                 backgroundColor: '#e3e8d2',
@@ -138,7 +132,7 @@ angular.module('myApp.dashboard.temple', [
                 pointHoverBorderColor: '#e3e8d2'
             }
         ];
-        $scope.barData = templeHistoryRemittances;
+        $scope.barData = templeHistory[0].templeHistoryRemittances;
         $scope.barOptions = {
             responsive: true,
             maintainAspectRatio: false,
@@ -148,25 +142,22 @@ angular.module('myApp.dashboard.temple', [
     // Bar Chart Ends Here
 
     // Line Chart Starts Here
-    $scope.lineLabels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    for (var i = 0; i < months.length; i++) {
+    service.getYearlyRemittanceOfSpecificTemple().then(function(response) {
+        yearlyRemittanceOfTemple = response;
 
-        service.getMonthlyRemittanceOfTemple(months[i], currentdate.getFullYear() - 1).then(function(response) {
-            currentYearMonthlyRem.push(response.data.sum);
-        });
+        $scope.constructLineChart();
+    });
 
-        service.getMonthlyRemittanceOfTemple(months[i], currentdate.getFullYear() - 2).then(function(response) {
-            prevYearMonthlyRem.push(response.data.sum);
-        });
-    }
-
-    $scope.lineSeries = ['2017', '2018'];
-    $scope.lineColors = ['#F1C40F', '#717984', '#3498DB', '#72C02C'];
-    $scope.lineData = [prevYearMonthlyRem, currentYearMonthlyRem];
-    $scope.lineOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: { display: true, position: 'bottom' }
+    $scope.constructLineChart = function() {
+        $scope.lineLabels = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        $scope.lineSeries = [service.currentYear, service.previousYear];
+        $scope.lineColors = ['#dd0d03', '#36cae8', '#3498DB', '#72C02C'];
+        $scope.lineData = [yearlyRemittanceOfTemple.currentYearMonthlyRem, yearlyRemittanceOfTemple.previousYearMonthlyRem];
+        $scope.lineOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: { display: true, position: 'bottom' }
+        };
     };
     // Line Chart Ends Here
 

@@ -65,8 +65,8 @@ body,
 
 @media (min-width: 768px) {
     .topnavbar {
-        background-color: #798E94;
-        background-image: linear-gradient(to right, #798E94 0%, #798E94 100%);
+        background-color: #00805d;
+        background-image: linear-gradient(to right, #00805d 0%, #00805d 100%);
         background-repeat: repeat-x;
     }
     .topnavbar .navbar-nav>.open>a,

@@ -109,15 +109,15 @@
                                 <thead>
                                     <tr>
                                         <th data-priority="1">Temple</th>
-                                        <th>2018 Goal</th>
-                                        <th>2018 Remittance YTD</th>
+                                        <th>{{currentYear}} Goal</th>
+                                        <th>{{currentYear}} Remittance YTD</th>
                                         <th>YTD Progress</th>
                                         <th>Current Month Remittance</th>
-                                        <th>2018 Monthly Goal</th>
+                                        <th>{{currentYear}} Monthly Goal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="detail in templeDetails" ng-click="openTempleDetails(detail)" ng-if="detail.yearlyRemittance != 0">
+                                    <tr ng-repeat="detail in templeDetails | unique: 'detail.temple'" ng-click="openTempleDetails(detail)" ng-if="detail.yearlyRemittance != 0">
                                         <td data-priority="1">{{detail.temple}}</td>
                                         <td>{{detail.yearlyGoal}}</td>
                                         <td>{{detail.yearlyRemittance}}</td>
@@ -141,7 +141,7 @@
         <!-- END Datatable-->
 
         <!-- Chart Starts Here -->
-        <div class="row">
+        <div class="row" ng-show="totalYTDRemittance > 0 && totalGoal > 0 && remittanceDetails.previousYearMonthlyRem.length > 0">
             <div class="col-xl-6">
                 <!-- START card-->
                 <div class="card card-default card-demo" id="cardChart2">
@@ -166,6 +166,23 @@
                     <div class="card-wrapper collapse show">
                         <div class="card-body">
                             <canvas id="line" class="chart chart-line" chart-colors="lineColors" chart-data="lineData" chart-labels="lineLabels" chart-series="lineSeries" chart-options="lineOptions" style="height: 250px"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!-- END card-->
+            </div>
+        </div>
+
+        <div class="row" ng-show="totalYTDRemittance == 0 && totalGoal == 0 && remittanceDetails.previousYearMonthlyRem.length > 0">
+            <div class="col-xl-12">
+                <!-- START card-->
+                <div class="card card-default card-demo" id="cardChart4">
+                    <div class="card-header">
+                        <div class="card-title">Yearly Remittance</div>
+                    </div>
+                    <div class="card-wrapper collapse show">
+                        <div class="card-body">
+                            <canvas id="line2" class="chart chart-line" chart-colors="lineColors" chart-data="lineData" chart-labels="lineLabels" chart-series="lineSeries" chart-options="lineOptions" style="height: 250px"></canvas>
                         </div>
                     </div>
                 </div>

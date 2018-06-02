@@ -55,22 +55,22 @@ tooltip {
 }
 
 .bg-detail-one {
-    background-color: #798E94;
+    background-color: #dd0d03;
     color: #fff!important;
 }
 
 .bg-detail-two {
-    background-color: #f1d7b9;
+    background-color: #36cae8;
     color: #fff!important;
 }
 
 .bg-detail-three {
-    background-color: #b4bfbf;
+    background-color: #f88451;
     color: #fff!important;
 }
 
 .bg-detail-four {
-    background-color: #dbd5c5;
+    background-color: #00805d;
     color: #fff!important;
 }
 
@@ -85,13 +85,13 @@ tooltip {
 }
 
 .page-item.active .page-link {
-    background-color: #798E94!important;
-    border-color: #798E94!important;
+    background-color: #00805d!important;
+    border-color: #00805d!important;
     color: #fff!important;
 }
 
 .page-link {
-    color: #798E94!important;
+    color: #00805d!important;
 }
 
 .amcharts-chart-div>a {
@@ -99,6 +99,21 @@ tooltip {
 }
 
 .table-hover tbody tr:hover {
-    background-color: rgba(219, 213, 197, 0.38)!important;
+    background-color: rgba(0, 128, 93, 0.1)!important;
     cursor: pointer;
+}
+
+.back-button {
+    color: #00805d;
+    font-size: 17px;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.back-button:hover {
+    color: #00805d;
+    font-size: 17px;
+    margin-bottom: 20px;
+    display: inline-block;
+    text-decoration: none;
 }
