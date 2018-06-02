@@ -22,10 +22,7 @@ angular.module('myApp.dashboard.temple', [
     $scope.remProgress = $localStorage.templeDetail.remittanceProgress;
     $scope.remToBreakRecord = 0;
 
-    var templeDetails = [];
     var totalGoal = $localStorage.currentYearGoal;
-    var currentdate = new Date();
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     var templeHistory = [];
     var yearlyRemittanceOfTemple = {};
 
