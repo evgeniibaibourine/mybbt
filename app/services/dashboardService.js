@@ -23,9 +23,9 @@ angular.module('myApp.dashboard.service', [
         var currentdate = new Date();
         var currentMonth = currentdate.getMonth();
         // Here Current Year is 2017. Remove "- 1" from the end when you'll have 2018 data
-        service.currentYear = currentdate.getFullYear() - 1;
+        service.currentYear = currentdate.getFullYear();
         // Here Previous Year is 2016. Change "- 2" from the end to "- 1" when you'll have 2018 data
-        service.previousYear = currentdate.getFullYear() - 2;
+        service.previousYear = currentdate.getFullYear() - 1;
 
 
         // Gets Temple Details for Dashboard View
