@@ -13,7 +13,6 @@ angular.module('myApp.dashboard.service', [
     function dashboardService() {
 
         var baseUrl = $location.protocol() + "://" + $location.host() + "/api";
-        console.log($location.protocol() + "://" + $location.host() + "/api");
         var service = this;
         service.successfulTemples = 0;
 
