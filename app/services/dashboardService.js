@@ -12,7 +12,8 @@ angular.module('myApp.dashboard.service', [
 
     function dashboardService() {
 
-        var baseUrl = 'http://localhost:8080/api';
+        var baseUrl = $location.protocol() + "://" + $location.host() + "/api";
+        console.log($location.protocol() + "://" + $location.host() + "/api");
         var service = this;
         service.successfulTemples = 0;
 
