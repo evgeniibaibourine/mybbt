@@ -64,7 +64,7 @@
                         </div>
                         <div class="col-10">
                             <div class="card-body text-center">
-                                <h3 class="mt-0" ng-if="successfulTemples > 0">{{ successfullTemples }}</h3>
+                                <h3 class="mt-0" ng-if="successfulTemples > 0">{{ successfulTemples }}</h3>
                                 <h3 class="mt-0" ng-if="successfulTemples == 0">0</h3>
                                 <p class="mb-0 text-muted">Temples met their goals</p>
                             </div>
@@ -119,15 +119,16 @@
                                 <tbody>
                                     <tr ng-repeat="detail in templeDetails | unique: 'detail.temple'" ng-click="openTempleDetails(detail)" ng-if="detail.yearlyRemittance != 0">
                                         <td data-priority="1">{{detail.temple}}</td>
-                                        <td>{{detail.yearlyGoal}}</td>
-                                        <td>{{detail.yearlyRemittance}}</td>
+                                        <td>{{detail.yearlyGoal | number}}</td>
+                                        <td>{{detail.yearlyRemittance | number}}</td>
                                         <td>
                                             <div class="progress progress-xs m-0" tooltips tooltip-template="{{detail.remittanceProgress | number: 2}}%">
                                                 <div class="progress-bar progress-bar-striped" ng-class="progressColor({{detail.remittanceProgress | number: 2}})" role="progressbar" aria-valuenow="{{detail.remittanceProgress | number: 2}}" aria-valuemin="0" aria-valuemax="100" style="width: {{detail.remittanceProgress | number: 2}}%">
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{detail.currentRemittance}}</td>
+                                        <td ng-if="detail.currentRemittance != 'N/A'">{{detail.currentRemittance | number}}</td>
+                                        <td ng-if="detail.currentRemittance == 'N/A'">{{detail.currentRemittance}}</td>
                                         <td>{{detail.monthlyGoal | number: 2}}</td>
                                     </tr>
                                 </tbody>
