@@ -111,7 +111,7 @@ app.get("/api/dashboard", function(req, res) {
     let now = moment();
     let monthNumber = moment().month();
     let thisMonth = moment().month(monthNumber).format('MMMM');
-    let thisYear = 2017; // now.year(); //  <-- use this because we don't have 2018 data yet
+    let thisYear = now.year(); //  <-- use this because we don't have 2018 data yet
     let lastYear = moment().subtract(1, 'year');
     let ret = {};
     let uniqueTemples;
