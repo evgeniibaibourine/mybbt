@@ -97,7 +97,7 @@ function(e, t, o, a) {
         })
     })
 }(window, document, window.jQuery),
-function(e, t, o, a) {
+/* function(e, t, o, a) {
     var n = "site",
         r = "jq-appLang";
     o(function() {
@@ -117,7 +117,7 @@ function(e, t, o, a) {
 
         function a(e) { o("[data-localize]").localize(n, e) }
     })
-}(window, document, window.jQuery),
+}(window, document, window.jQuery), */
 function(e, t, o, a) {
     o(function() {
         var e = new n;
