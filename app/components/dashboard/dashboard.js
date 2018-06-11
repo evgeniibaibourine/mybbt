@@ -286,6 +286,9 @@ angular.module('myApp.dashboard', [
         // Current Year's Percentage of Goal
         $scope.goalPercentage = $localStorage.goalPercentage;
 
+        // Number of Successful Temples
+        $scope.successfulTemples = $localStorage.successfulTemples;
+
         $scope.constructPieChart();
     });
 
@@ -311,10 +314,6 @@ angular.module('myApp.dashboard', [
         $scope.remittanceDetails = details;
 
         $scope.constructLineChart();
-    });
-
-    service.getSuccessfulTemples().then(function(response) {
-        $scope.successfulTemples = response;
     });
 
     // Pie Chart Starts Here

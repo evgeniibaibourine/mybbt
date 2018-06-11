@@ -12,13 +12,16 @@ angular.module('myApp.dashboard.service', [
 
     function dashboardService() {
 
-        var baseUrl = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/api";
+        var baseUrl = "";
+        if ($location.host() == "localhost") {
+            baseUrl = $location.protocol() + "://" + $location.host() + ":" + $location.port() + "/api";
+        } else {
+            baseUrl = $location.protocol() + "://" + $location.host() + "/api";
+        }
         var service = this;
-        service.successfulTemples = 0;
 
         // Local Variables used in this service
         var templeDetailsArray = [];
-        var allTemples = [];
         var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         var currentdate = new Date();
         var currentMonth = currentdate.getMonth();
@@ -37,6 +40,7 @@ angular.module('myApp.dashboard.service', [
                 var currentYearGoal = 0; // for 2018 Goal
                 var currentYearYTDRem = 0; // for 2018 YTD Remittance
                 var goalPercentage = 0; // for Percentage of Goal
+                var successfulTemples = 0; // for Number of Successful Temples
 
                 angular.forEach(response.data, function(value, key) {
                     if (parseInt(value.goal) > 0 && value.ytd > 0) {
@@ -68,6 +72,9 @@ angular.module('myApp.dashboard.service', [
                         templeDetailsArray.push(details);
                         currentYearGoal = parseInt(value.goal) + currentYearGoal;
                         currentYearYTDRem = parseInt(value.ytd) + currentYearYTDRem;
+                        if (parseInt(value.ytd) >= parseInt(value.goal)) {
+                            successfulTemples++;
+                        }
                     }
                 });
 
@@ -78,6 +85,7 @@ angular.module('myApp.dashboard.service', [
                 $localStorage.currentYearYTDRemmittance = currentYearYTDRem;
                 $localStorage.currentYearGoal = currentYearGoal;
                 $localStorage.goalPercentage = goalPercentage;
+                $localStorage.successfulTemples = successfulTemples;
             });
             return deferred.promise;
         };
@@ -96,7 +104,6 @@ angular.module('myApp.dashboard.service', [
                     var remCount = 0;
                     var temp = 0;
                     var matchFound = false;
-                    var filteredUniqueTemplesData = [];
                     var filteredMonthWiseData = [];
                     var filteredTemplesSubmittedRem = [];
                     var uniqueTempleDetails = {};
@@ -131,15 +138,6 @@ angular.module('myApp.dashboard.service', [
                     filteredTemplesSubmittedRem.push($filter('unique')(templesSubmittedRem, 'temple'));
                     uniqueTemples = filteredTemplesSubmittedRem[0].length;
 
-                    filteredUniqueTemplesData.push($filter('unique')(response.data.data, 'Temple'));
-                    angular.forEach(filteredUniqueTemplesData, function(value, key) {
-                        for (var i = 0; i < value.length; i++) {
-                            allTemples.push(value[i].Temple);
-                            /* if (value[i].Remittance > 0) {
-                                uniqueTemples++;
-                            } */
-                        }
-                    });
                     total2018YTDRem = response.data.sum;
                     return $http.get(baseUrl + '/remittances/year/' + service.previousYear);
                 })
@@ -163,41 +161,10 @@ angular.module('myApp.dashboard.service', [
                         "sum": total2018YTDRem,
                         "uniqueTemples": uniqueTemples,
                         "currentYearMonthlyRem": currYearRem,
-                        "previousYearMonthlyRem": prevYearRem,
-                        "allTemples": allTemples
+                        "previousYearMonthlyRem": prevYearRem
                     };
-                    service.getSuccessfulTemples();
                     deferred.resolve(details);
                 });
-            return deferred.promise;
-        };
-
-        // Gets Number of Temples who have met their Goal 
-        service.getSuccessfulTemples = function() {
-            var deferred = $q.defer();
-
-            if (allTemples.length > 0) {
-                for (var i = 0; i < allTemples.length; i++) {
-                    $http.get(baseUrl + '/remittances/year/' + service.currentYear + '/' + allTemples[i]).then(function(response) {
-                        var count = false;
-                        var currRem = 0;
-                        angular.forEach(response.data.data, function(value, key) {
-                            var temp = value.Remittance;
-                            currRem = parseInt(temp.toString().replace(/,/g, ''));
-                            if (currRem >= response.data.sum) {
-                                count = true;
-                                return;
-                            } else {
-                                count = false;
-                            }
-                            if (count == true) {
-                                service.successfulTemples++;
-                            }
-                        });
-                    });
-                }
-                deferred.resolve(service.successfulTemples);
-            }
             return deferred.promise;
         };
 
