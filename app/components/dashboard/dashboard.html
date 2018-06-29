@@ -16,7 +16,7 @@
                         </div>
                         <div class="col-10">
                             <div class="card-body text-center">
-                                <h3 class="mt-0">{{ remittanceDetails.sum }}</h3>
+                                <h3 class="mt-0">${{ remittanceDetails.sum | number }}</h3>
                                 <p class="mb-0 text-muted">Total Remittance YTD</p>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                                 <select class="custom-select custom-select-md month-switcher-select" ng-init="selectedTempleDetailsMonth = monthArray[monthArray.length - 1]" ng-model="selectedTempleDetailsMonth" ng-options="month for month in monthArray" ng-change="monthSwitcher(selectedTempleDetailsMonth)">
                                 </select> details</span>
                             </div>
-                            <table datatable="ng" class="table table-striped table-hover my-4 w-100" dt-options="dtOptions" id="templeDetails">
+                            <table class="table table-striped table-hover my-4 w-100" id="templeDetails">
                                 <thead>
                                     <tr>
                                         <th data-priority="1">Temple</th>
@@ -117,19 +117,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="detail in templeDetails | unique: 'detail.temple'" ng-click="openTempleDetails(detail)" ng-if="detail.yearlyRemittance != 0">
+                                    <tr ng-repeat="detail in templeDetails track by detail.temple" ng-click="openTempleDetails(detail)" ng-if="detail.yearlyRemittance != 0">
                                         <td data-priority="1">{{detail.temple}}</td>
-                                        <td>{{detail.yearlyGoal | number}}</td>
-                                        <td>{{detail.yearlyRemittance | number}}</td>
+                                        <td>${{detail.yearlyGoal | number}}</td>
+                                        <td>${{detail.yearlyRemittance | number}}</td>
                                         <td>
                                             <div class="progress progress-xs m-0" tooltips tooltip-template="{{detail.remittanceProgress | number: 2}}%">
                                                 <div class="progress-bar progress-bar-striped" ng-class="progressColor({{detail.remittanceProgress | number: 2}})" role="progressbar" aria-valuenow="{{detail.remittanceProgress | number: 2}}" aria-valuemin="0" aria-valuemax="100" style="width: {{detail.remittanceProgress | number: 2}}%">
                                                 </div>
+                                                <span class="sr-only">{{detail.remittanceProgress | number: 2}}</span>
                                             </div>
                                         </td>
-                                        <td ng-if="detail.currentRemittance != 'N/A'">{{detail.currentRemittance | number}}</td>
+                                        <td ng-if="detail.currentRemittance != 'N/A'"><span class="sr-only">{{detail.currentRemittance}}</span>${{detail.currentRemittance | number}}</td>
                                         <td ng-if="detail.currentRemittance == 'N/A'">{{detail.currentRemittance}}</td>
-                                        <td>{{detail.monthlyGoal | number: 2}}</td>
+                                        <td>${{detail.monthlyGoal | number: 2}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -193,3 +194,19 @@
         <!-- Chart Ends Here -->
     </div>
 </section>
+
+<script>
+    $("document").ready(function() {
+        setTimeout(function() {
+            $("#templeDetails").DataTable({
+                "dom": 'frtip',
+                "pagingType": "simple_numbers",
+                "responsive": true,
+                columnDefs: [{
+                    type: 'natural-nohtml',
+                    targets: [3, 4]
+                }]
+            });
+        }, 1500);
+    });
+</script>

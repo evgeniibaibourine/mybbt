@@ -3,7 +3,6 @@
 angular.module('myApp.dashboard', [
     'ngRoute',
     '720kb.tooltips',
-    'datatables',
     'chart.js',
     'angular.filter',
     'myApp.dashboard.service'
@@ -134,7 +133,7 @@ angular.module('myApp.dashboard', [
             var details = {};
 
             scope.$watch('templeDetails', function(newData, oldData) {
-                if (newData) {
+                if (newData && !oldData) {
                     for (var i = 0; i < scope.templeDetails.length; i++) {
                         if (scope.templeDetails[i].latitude !== "" && scope.templeDetails[i].country == "USA") {
                             if (scope.templeDetails[i].temple == "Calgary") {
@@ -244,7 +243,7 @@ angular.module('myApp.dashboard', [
     }
 })
 
-.controller('DashboardCtrl', ['$scope', 'dashboardService', 'DTOptionsBuilder', '$localStorage', '$filter', function($scope, service, DTOptionsBuilder, $localStorage, $filter) {
+.controller('DashboardCtrl', ['$scope', 'dashboardService', '$localStorage', '$filter', function($scope, service, $localStorage, $filter) {
 
     // Temple Details Datatable Starts Here
     $scope.templeDetails = [];
@@ -270,9 +269,6 @@ angular.module('myApp.dashboard', [
             $scope.templeDetails = details;
         });
     };
-
-    // Datatable Options
-    $scope.dtOptions = DTOptionsBuilder.newOptions().withPaginationType('simple_numbers').withOption('responsive', true).withDOM('ftipr');
 
     service.getTempleDetails().then(function(details) {
         $scope.templeDetails = details;
@@ -313,6 +309,8 @@ angular.module('myApp.dashboard', [
     service.getYearlyRemittance().then(function(details) {
         $scope.remittanceDetails = details;
 
+        $scope.templeDetails = details.templesArray;
+
         $scope.constructLineChart();
     });
 
@@ -338,7 +336,18 @@ angular.module('myApp.dashboard', [
         $scope.pieOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            legend: { display: true, position: 'bottom' }
+            legend: {
+                display: true,
+                position: 'bottom'
+            },
+            tooltips: {
+                mode: 'label',
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data.labels[tooltipItem.index] + ': $' + data['datasets'][0]['data'][tooltipItem['index']].toLocaleString();
+                    }
+                }
+            }
         };
     };
     // Pie Chart Ends Here
@@ -352,7 +361,29 @@ angular.module('myApp.dashboard', [
         $scope.lineOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            legend: { display: true, position: 'bottom' }
+            legend: { display: true, position: 'bottom' },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                            if (parseInt(value) >= 0) {
+                                return '$' + value.toLocaleString();
+                            } else {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+                mode: 'label',
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + ': $' + tooltipItem.yLabel.toLocaleString();
+                    }
+                }
+            }
         };
     };
     // Line Chart Ends Here
