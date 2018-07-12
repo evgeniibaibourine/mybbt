@@ -37,56 +37,86 @@ angular.module('myApp.dashboard.service', [
             var details = {};
 
             $http.get(baseUrl + '/dashboard').then(function(response) {
-                var currentYearGoal = 0; // for 2018 Goal
-                var currentYearYTDRem = 0; // for 2018 YTD Remittance
-                var goalPercentage = 0; // for Percentage of Goal
-                var successfulTemples = 0; // for Number of Successful Temples
+                    var currentYearGoal = 0; // for 2018 Goal
+                    var currentYearYTDRem = 0; // for 2018 YTD Remittance
+                    var goalPercentage = 0; // for Percentage of Goal
+                    var successfulTemples = 0; // for Number of Successful Temples
+                    templeDetailsArray.length = 0;
 
-                angular.forEach(response.data, function(value, key) {
-                    if (parseInt(value.goal) > 0 && value.ytd > 0) {
-                        if (value.currentMonth.length > 0) {
-                            details = {
-                                "temple": key,
-                                "yearlyGoal": value.goal,
-                                "yearlyRemittance": value.ytd,
-                                "remittanceProgress": (value.ytd / value.goal * 100).toFixed(2),
-                                "monthlyGoal": (value.goal / 12).toFixed(2),
-                                "currentRemittance": value.currentMonth[0].Remittance,
-                                "country": value.currentMonth[0].Country,
-                                "latitude": value.currentMonth[0].Lat,
-                                "longitude": value.currentMonth[0].Lng
-                            };
-                        } else {
-                            details = {
-                                "temple": key,
-                                "yearlyGoal": value.goal,
-                                "yearlyRemittance": value.ytd,
-                                "remittanceProgress": (value.ytd / value.goal * 100).toFixed(2),
-                                "monthlyGoal": (value.goal / 12).toFixed(2),
-                                "currentRemittance": "N/A",
-                                "country": 'N/A',
-                                "latitude": 0,
-                                "longitude": 0
-                            };
+                    angular.forEach(response.data, function(value, key) {
+                        if (parseInt(value.goal) > 0) {
+                            if (value.currentMonth.length > 0) {
+                                details = {
+                                    "temple": key,
+                                    "yearlyGoal": value.goal,
+                                    "yearlyRemittance": value.ytd,
+                                    "remittanceProgress": (value.ytd / value.goal * 100).toFixed(2),
+                                    "monthlyGoal": (value.goal / 12).toFixed(2),
+                                    "currentRemittance": value.currentMonth[0].Remittance,
+                                    "country": value.currentMonth[0].Country,
+                                    "latitude": value.currentMonth[0].Lat,
+                                    "longitude": value.currentMonth[0].Lng
+                                };
+                            } else {
+                                details = {
+                                    "temple": key,
+                                    "yearlyGoal": value.goal,
+                                    "yearlyRemittance": value.ytd,
+                                    "remittanceProgress": (value.ytd / value.goal * 100).toFixed(2),
+                                    "monthlyGoal": (value.goal / 12).toFixed(2),
+                                    "currentRemittance": "N/A",
+                                    "country": 'N/A',
+                                    "latitude": 0,
+                                    "longitude": 0
+                                };
+                            }
+                            templeDetailsArray.push(details);
+                            currentYearGoal = parseInt(value.goal) + currentYearGoal;
+                            currentYearYTDRem = parseInt(value.ytd) + currentYearYTDRem;
+                            if (parseInt(value.ytd) >= parseInt(value.goal)) {
+                                successfulTemples++;
+                            }
                         }
-                        templeDetailsArray.push(details);
-                        currentYearGoal = parseInt(value.goal) + currentYearGoal;
-                        currentYearYTDRem = parseInt(value.ytd) + currentYearYTDRem;
-                        if (parseInt(value.ytd) >= parseInt(value.goal)) {
-                            successfulTemples++;
+                    });
+
+                    goalPercentage = (currentYearYTDRem / currentYearGoal) * 100;
+
+                    // Storing variables in Local Storage for better app speed
+                    $localStorage.currentYearYTDRemmittance = currentYearYTDRem;
+                    $localStorage.currentYearGoal = currentYearGoal;
+                    $localStorage.goalPercentage = goalPercentage;
+                    $localStorage.successfulTemples = successfulTemples;
+
+                    return $http.get(baseUrl + '/remittances/year/' + service.currentYear);
+                })
+                .then(function(response) {
+                    var filteredTemplesSubmittedRem = [];
+
+                    filteredTemplesSubmittedRem.push($filter('unique')(response.data.data, 'Temple'));
+
+                    if (templeDetailsArray.length > 0 && filteredTemplesSubmittedRem[0].length > 0) {
+                        for (var i = 0; i < templeDetailsArray.length; i++) {
+                            if (templeDetailsArray[i].latitude == 0 && templeDetailsArray[i].longitude == 0) {
+                                if (templeDetailsArray[i].temple === filteredTemplesSubmittedRem[0][i].Temple) {
+                                    templeDetailsArray[i].latitude = filteredTemplesSubmittedRem[0][i].Lat;
+                                    templeDetailsArray[i].longitude = filteredTemplesSubmittedRem[0][i].Lng;
+                                    templeDetailsArray[i].country = filteredTemplesSubmittedRem[0][i].Country;
+                                } else {
+                                    var index = -1;
+                                    filteredTemplesSubmittedRem[0].some(function(obj, j) {
+                                        return obj.Temple === templeDetailsArray[i].temple ? index = j : false;
+                                    });
+                                    if (index >= 0) {
+                                        templeDetailsArray[i].latitude = filteredTemplesSubmittedRem[0][index].Lat;
+                                        templeDetailsArray[i].longitude = filteredTemplesSubmittedRem[0][index].Lng;
+                                        templeDetailsArray[i].country = filteredTemplesSubmittedRem[0][index].Country;
+                                    }
+                                }
+                            }
                         }
                     }
+                    deferred.resolve(templeDetailsArray);
                 });
-
-                deferred.resolve(templeDetailsArray);
-                goalPercentage = (currentYearYTDRem / currentYearGoal) * 100;
-
-                // Storing variables in Local Storage for better app speed
-                $localStorage.currentYearYTDRemmittance = currentYearYTDRem;
-                $localStorage.currentYearGoal = currentYearGoal;
-                $localStorage.goalPercentage = goalPercentage;
-                $localStorage.successfulTemples = successfulTemples;
-            });
             return deferred.promise;
         };
 
@@ -123,7 +153,10 @@ angular.module('myApp.dashboard.service', [
                                             uniqueTempleDetails = {
                                                 "temple": item[k].Temple,
                                                 "remittance": temp,
-                                                "month": item[k].Month
+                                                "month": item[k].Month,
+                                                "lat": item[k].Lat,
+                                                "lng": item[k].Lng,
+                                                "country": item[k].Country
                                             };
                                             templesSubmittedRem.push(uniqueTempleDetails);
                                         }
@@ -206,6 +239,16 @@ angular.module('myApp.dashboard.service', [
                     }
                     templesArray = templeDetailsArray;
                 }
+                angular.element("#templeDetails").DataTable().destroy();
+                angular.element("#templeDetails").DataTable({
+                    "dom": 'frtip',
+                    "pagingType": "simple_numbers",
+                    "responsive": true,
+                    columnDefs: [{
+                        type: 'natural-nohtml',
+                        targets: [3, 4]
+                    }]
+                });
                 deferred.resolve(templesArray);
             });
             return deferred.promise;
@@ -228,7 +271,7 @@ angular.module('myApp.dashboard.service', [
             $http.get(baseUrl + '/remittances/history?months=6&location=' + $localStorage.templeDetail.temple).then(function(response) {
 
                 for (var i = 6; i >= 1; i--) {
-                    templeHistoryMonths.push(moment().subtract(i, "month").startOf("month").format('MMMM'));
+                    templeHistoryMonths.push(moment().subtract(i, "month").startOf("month").format('MMM YYYY'));
                 }
 
                 for (var j = 0; j < 6; j++) {

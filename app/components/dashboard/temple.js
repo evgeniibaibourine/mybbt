@@ -61,11 +61,19 @@ angular.module('myApp.dashboard.temple', [
         pointBorderColor: '#fff',
         pointHoverBorderColor: '#78ead3'
     }];
-    $scope.pieData = [$scope.ytdRemittance, totalGoal];
+    $scope.pieData = [$scope.ytdRemittance, parseInt($localStorage.templeDetail.yearlyGoal)];
     $scope.pieOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        legend: { display: true, position: 'bottom' }
+        legend: { display: true, position: 'bottom' },
+        tooltips: {
+            mode: 'label',
+            callbacks: {
+                label: function(tooltipItem, data) {
+                    return data.labels[tooltipItem.index] + ': $' + data['datasets'][0]['data'][tooltipItem['index']].toLocaleString();
+                }
+            }
+        }
     };
     // Pie Chart Ends Here
 
@@ -133,7 +141,29 @@ angular.module('myApp.dashboard.temple', [
         $scope.barOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            legend: { display: false }
+            legend: { display: false },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                            if (parseInt(value) >= 0) {
+                                return '$' + value.toLocaleString();
+                            } else {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+                mode: 'label',
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return '$' + tooltipItem.yLabel.toLocaleString();
+                    }
+                }
+            }
         };
     };
     // Bar Chart Ends Here
@@ -153,7 +183,29 @@ angular.module('myApp.dashboard.temple', [
         $scope.lineOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            legend: { display: true, position: 'bottom' }
+            legend: { display: true, position: 'bottom' },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value, index, values) {
+                            if (parseInt(value) >= 0) {
+                                return '$' + value.toLocaleString();
+                            } else {
+                                return '$' + value;
+                            }
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+                mode: 'label',
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + ': $' + tooltipItem.yLabel.toLocaleString();
+                    }
+                }
+            }
         };
     };
     // Line Chart Ends Here

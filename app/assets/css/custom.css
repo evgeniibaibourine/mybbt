@@ -1434,9 +1434,12 @@ _:-ms-lang(x) {
 }
 
 body {
-    font-family: Source Sans Pro, sans-serif;
+    /* font-family: Source Sans Pro, sans-serif;
     color: #656565;
-    font-size: .875rem
+    font-size: .875rem */
+    font-family: sans-serif;
+    color: #656565;
+    font-size: .85rem
 }
 
 h1,
